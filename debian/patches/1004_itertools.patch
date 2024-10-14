@@ -1,0 +1,17 @@
+Description: accept newer branches of crate itertools
+Author: Jonas Smedegaard <dr@jones.dk>
+Bug-Debian: https://bugs.debian.org/1082663
+Last-Update: 2024-10-04
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -126,7 +126,7 @@
+ cc = "1.0"
+ chrono = "0.4.33"
+ filetime = "0.2"
+-itertools = "0.12"
++itertools = ">= 0.12, <= 0.13"
+ predicates = "=3.1.0"
+ serial_test = "3.1"
+ temp-env = "0.3.6"

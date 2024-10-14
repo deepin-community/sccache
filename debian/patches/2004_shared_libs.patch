@@ -1,0 +1,19 @@
+Description: use system-shared libraries
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-09-30
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -114,10 +114,6 @@
+ ]
+ default = ["all"]
+ native-zlib = []
+-# Enable features that will build a vendored version of openssl and
+-# statically linked with it, instead of linking against the system-wide openssl
+-# dynamically or statically.
+-vendored-openssl = ["reqwest?/native-tls-vendored"]
+ # Enable features that require unstable features of Nightly Rust.
+ unstable = []
+ # Enables distributed support in the sccache client

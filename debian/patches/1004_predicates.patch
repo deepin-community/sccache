@@ -1,0 +1,17 @@
+Description: accept newer releases of crate predicates
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-07-03
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -127,7 +127,7 @@
+ chrono = "0.4.33"
+ filetime = "0.2"
+ itertools = ">= 0.12, <= 0.13"
+-predicates = "=3.1.0"
++predicates = "3.1.0"
+ serial_test = "3.1"
+ temp-env = "0.3.6"
+ test-case = "3.3.1"

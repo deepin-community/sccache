@@ -1,0 +1,100 @@
+Description: fix cache collision between object file and precompiled headers
+ When compiling with PCH enabled,
+ it happens that some times object files end up with PCH content,
+ or that .gch files end up with object code.
+ .
+ Simplest way to reproduce the problem:
+ .
+   $ touch empty.c
+   $ gcc              -c -o out1 empty.c
+   $ gcc  -x c-header -c -o out2 empty.c
+   $ file out1 out2
+   out1: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+   out2: GCC precompiled header (version 014) for C
+ .
+ The two files are different.
+ But if we feed these compilations to sccache,
+ they lead to the same result:
+ .
+   $ sccache gcc              -c -o out3 empty.c
+   $ sccache gcc  -x c-header -c -o out4 empty.c
+   $ file out3 out4
+   out3: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+   out4: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+ .
+ Same thing is reproducible
+ with c++ compiler and -x c++-header argument.
+ .
+ The reason is that the hash string
+ that identifies each command line is the same.
+ .
+ With this patch, compilation of C files is always differentiated
+ from compilations of same C-Header files.
+ And compilation of C++ files is always differentiated
+ from compilations of same C++-Header files.
+Author: Dimitrios Apostolou <jimis@gmx.net>
+Source: upstream, https://github.com/mozilla/sccache/commit/31706d4
+Bug: https://github.com/mozilla/sccache/issues/1851
+Last-Update: 2024-10-09
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/src/compiler/c.rs
++++ b/src/compiler/c.rs
+@@ -1449,6 +1449,42 @@
+     }
+ 
+     #[test]
++    fn test_header_differs() {
++        let args = ovec!["a", "b", "c"];
++        const PREPROCESSED: &[u8] = b"hello world";
++        assert_neq!(
++            hash_key("abcd", Language::C, &args, &[], &[], PREPROCESSED, false),
++            hash_key(
++                "abcd",
++                Language::CHeader,
++                &args,
++                &[],
++                &[],
++                PREPROCESSED,
++                false
++            )
++        );
++    }
++
++    #[test]
++    fn test_plusplus_header_differs() {
++        let args = ovec!["a", "b", "c"];
++        const PREPROCESSED: &[u8] = b"hello world";
++        assert_neq!(
++            hash_key("abcd", Language::Cxx, &args, &[], &[], PREPROCESSED, true),
++            hash_key(
++                "abcd",
++                Language::CxxHeader,
++                &args,
++                &[],
++                &[],
++                PREPROCESSED,
++                true
++            )
++        );
++    }
++
++    #[test]
+     fn test_hash_key_executable_contents_differs() {
+         let args = ovec!["a", "b", "c"];
+         const PREPROCESSED: &[u8] = b"hello world";
+--- a/src/compiler/compiler.rs
++++ b/src/compiler/compiler.rs
+@@ -146,8 +146,10 @@
+ 
+     pub fn as_str(self) -> &'static str {
+         match self {
+-            Language::C | Language::CHeader => "c",
+-            Language::Cxx | Language::CxxHeader => "c++",
++            Language::C => "c",
++            Language::CHeader => "cHeader",
++            Language::Cxx => "c++",
++            Language::CxxHeader => "c++Header",
+             Language::GenericHeader => "c/c++",
+             Language::ObjectiveC => "objc",
+             Language::ObjectiveCxx => "objc++",

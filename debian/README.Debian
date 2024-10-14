@@ -1,0 +1,29 @@
+# sccache for Debian
+
+## Usage
+
+The recommended way to use this with Cargo-based rust code
+is to set sccache as wrapper for rustc,
+e.g. through an environment variable like this:
+
+  export RUSTC_WRAPPER=sccache
+
+sccache is also usable similar to ccache,
+where you either create "cc" and "gcc" symlinks to /usr/bin/sccache
+in your private bin directory
+(which must be before the real cc and gcc in your path),
+use CC="sccache gcc" on the make command line,
+or just prepend /usr/lib/sccache in your PATH environment variable,
+like this:
+
+  export PATH="/usr/lib/sccache:$PATH"
+
+Note that sccache should work with both native and cross compilers.
+
+## Lack of cloud storage support
+
+sccache is currently built without support for cloud storage
+due to lack of dependencies packaged for Debian.
+
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 03 Jul 2024 12:31:57 +0200

@@ -1,0 +1,48 @@
+Description: avoid not-in-Debian crate gzp
+ This essentially reverts upstream git commit 963f137.
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2023-08-24
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -43,9 +43,6 @@
+ ] }
+ fs-err = "2.11"
+ futures = "0.3"
+-gzp = { version = "0.11.3", default-features = false, features = [
+-  "deflate_rust",
+-] }
+ http = "1.0"
+ http-body-util = { version = "0.1", optional = true }
+ hyper = { version = "1.1", optional = true, features = ["server", "http1"] }
+--- a/src/dist/pkg.rs
++++ b/src/dist/pkg.rs
+@@ -169,22 +169,15 @@
+             Ok(())
+         }
+ 
+-        pub fn into_compressed_tar<W: Write + Send + 'static>(self, writer: W) -> Result<()> {
+-            use gzp::{
+-                deflate::Gzip,
+-                par::compress::{Compression, ParCompress, ParCompressBuilder},
+-            };
+-
++        pub fn into_compressed_tar<W: Write>(self, writer: W) -> Result<()> {
++            use flate2::write::GzEncoder;
+             let ToolchainPackageBuilder {
+                 dir_set,
+                 file_set,
+                 symlinks,
+             } = self;
+-            let par: ParCompress<Gzip> = ParCompressBuilder::new()
+-                .compression_level(Compression::default())
+-                .from_writer(writer);
+-            let mut builder = tar::Builder::new(par);
+-
++            let mut builder =
++                tar::Builder::new(GzEncoder::new(writer, flate2::Compression::default()));
+             for (tar_path, dir_path) in dir_set {
+                 builder.append_dir(tar_path, dir_path)?
+             }

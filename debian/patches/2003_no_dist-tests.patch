@@ -1,0 +1,18 @@
+Description: avoid feature dist-tests
+ Some needed crates are not available in Debian.
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-04-23
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -146,8 +146,6 @@
+   "url",
+   "sha2",
+ ]
+-# Enables dist tests with external requirements
+-dist-tests = ["dist-client"]
+ 
+ [workspace]
+ exclude = ["tests/test-crate"]

@@ -1,0 +1,44 @@
+Description: skip flaky network-requiring tests by default
+Author: Jonas Smedegaard <dr@jones.dk>
+Last-Update: 2022-06-28
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/sccache_cargo.rs
++++ b/tests/sccache_cargo.rs
+@@ -21,24 +21,28 @@
+ 
+ #[test]
+ #[serial]
++#[ignore]
+ fn test_rust_cargo_check() -> Result<()> {
+     test_rust_cargo_cmd("check", SccacheTest::new(None)?)
+ }
+ 
+ #[test]
+ #[serial]
++#[ignore]
+ fn test_rust_cargo_check_readonly() -> Result<()> {
+     test_rust_cargo_cmd_readonly("check", SccacheTest::new(None)?)
+ }
+ 
+ #[test]
+ #[serial]
++#[ignore]
+ fn test_rust_cargo_build() -> Result<()> {
+     test_rust_cargo_cmd("build", SccacheTest::new(None)?)
+ }
+ 
+ #[test]
+ #[serial]
++#[ignore]
+ fn test_rust_cargo_build_readonly() -> Result<()> {
+     test_rust_cargo_cmd_readonly("build", SccacheTest::new(None)?)
+ }
+@@ -86,6 +90,7 @@
+ /// sccache, causes a rebuild and is correctly printed to stdout.
+ #[test]
+ #[serial]
++#[ignore]
+ fn test_rust_cargo_run_with_env_dep_parsing() -> Result<()> {
+     test_rust_cargo_env_dep(SccacheTest::new(None)?)
+ }

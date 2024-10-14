@@ -1,0 +1,18 @@
+Description: accept older branches of crate which
+Author: Jonas Smedegaard <dr@jones.dk>
+Bug-Debian: https://bugs.debian.org/1064642
+Forwarded: not-needed
+Last-Update: 2024-04-22
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -95,7 +95,7 @@
+ uuid = { version = "1.9", features = ["v4"] }
+ walkdir = "2"
+ # by default which pulls in an outdated failure version
+-which = { version = "6", default-features = false }
++which = { version = ">= 4.2.5, <= 6", default-features = false }
+ zip = { version = "0.6", default-features = false }
+ zstd = "0.13"
+ 

@@ -1,0 +1,12 @@
+  * enable feature dist-client and check tests
+    on weak arches armel armhf mipsel
+    when reliable without out-of-memory issues
+    <https://github.com/mozilla/sccache/issues/1631>
+  * provide binary sccache-dist
+    when needed Rust crate is in Debian
+    * rouille
+  * enable features "azure", "gcs", "gha",
+    "memcached", "oss", "redis", "s3" and "webdav",
+    when needed Rust crate is in Debian
+    * opendal
+      <https://bugs.debian.org/1069715>

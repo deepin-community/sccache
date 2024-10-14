@@ -1,5 +1,594 @@
-template-repository (1.0-1) unstable; urgency=medium
+sccache (0.8.2-2) unstable; urgency=medium
 
-  * Initial release
+  * update and rename patch 2001_itertools -> 1004_itertools;
+    tighten build-dependency for crate itertools
+  * add patch cherry-picked upstream
+    to fix cache collision between object file and precompiled headers
+  * add patch 1004_env_logger
+    to accept newer branch of crate env_logger;
+    bump build-dependency for crate env_logger;
+    closes: bug#1084849, thanks to Matthias Geiger
+  * add patch 1004_base64
+    to accept newer branch of crate base64;
+    bump build-depenency for crate base64;
+    closes: bug#1084518, thanks to Matthias Geigeri
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 09 Oct 2024 23:32:19 +0200
+
+sccache (0.8.2-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update and unfuzz patches
+  * update TODO notes
+  * relax build-dependencies for crates serial-test which
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 30 Sep 2024 18:39:04 +0200
+
+sccache (0.8.1-8) unstable; urgency=medium
+
+  * drop patches 2001_is-terminal 2001_regex 2001_uuid,
+    obsoleted by Debian packaging changes
+  * add patches cherry-picked upstream:
+    + disable preprocessor cache with -MD and friends
+    + log when preprocessor cache cannot be used
+    + disable "warnings as errors" flag for CL preprocessing
+  * update patch 2001_itertools to cover itertools 0.13;
+    relax build-dependency for crate itertools;
+    closes: bug#1082663, thanks to Peter Green
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 24 Sep 2024 16:07:40 +0200
+
+sccache (0.8.1-7) unstable; urgency=medium
+
+  * trust upstream optimization level unless explicitly disabled
+  * enable hardening and pedantic build options
+  * drop patch 2001_strip-ansi-escapes;
+    tighten build-dependency for crate strip-ansi-escapes
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 31 Jul 2024 22:25:58 +0200
+
+sccache (0.8.1-6) unstable; urgency=medium
+
+  * simplify packaging;
+    build-depend on dh-sequence-rust
+    (not dh-cargo libstring-shellquote-perl)
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 12 Jul 2024 20:12:15 +0200
+
+sccache (0.8.1-5) unstable; urgency=medium
+
+  * provide set of compiler symlinks below /usr/lib/scccache,
+    updated using helper script update-sccache-symlinks,
+    derived from similar script in package ccache
+  * update and rename patch 2001_predicates -> 1004_predicates
+  * add patch cherry-picked upstream
+    to avoid keeping lock while writing to disk cache
+  * update dh-cargo fork
+  * update copyright info: update coverage
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 05 Jul 2024 09:33:22 +0200
+
+sccache (0.8.1-4) unstable; urgency=medium
+
+  * normalize patch 2001_temp-env
+    to use 2 lines of surrounding context lines
+  * drop patch 2001_zstd;
+    tighten (build-)depenency for crate zstd
+  * stop build-depend on package for crate counted-array;
+    closes: bug#1074243, thanks to Peter Green
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 25 Jun 2024 09:56:29 +0200
+
+sccache (0.8.1-3) unstable; urgency=medium
+
+  [ Blair Noctis ]
+  * update 2001_temp-env.patch to use ad-hoc impl
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 15 Jun 2024 10:20:50 +0200
+
+sccache (0.8.1-2) unstable; urgency=medium
+
+  * use same RUSTFLAGS for all weak architectures
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 01 Jun 2024 08:48:29 +0200
+
+sccache (0.8.1-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update patches
+  * relax to build-depend unversioned
+    when version is satisfied in Debian stable;
+    stop explicitly build-depend on recent rustc
+  * skip failing test
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 01 Jun 2024 00:55:10 +0200
+
+sccache (0.8.0-3) unstable; urgency=medium
+
+  * run build-time testing without optimization,
+    to not run out of memory
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 18 May 2024 09:19:18 +0200
+
+sccache (0.8.0-2) unstable; urgency=medium
+
+  * add patch 1002 to have test crate depend on byteorder
+    (not outdated itoa);
+    closes: bug#1069834, thanks to Adrian Bunk
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 17 May 2024 23:57:03 +0200
+
+sccache (0.8.0-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update copyright info:
+    + fix file path
+    + update coverage
+  * drop patch cherry-picked upstream, obsoleted by upstream changes
+  * update, unfuzz and reorganize patches
+  * tighten build-dependencies for crates reqwest toml
+  * declare compliance with Debian Policy 4.7.0
+  * declare Static-Built-Using
+    (not Built-Using nor XB-X-Cargo-Built-Using)
+  * add patch 2003 to avoid feature dist-tests
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 23 Apr 2024 07:27:16 +0200
+
+sccache (0.7.7-2) unstable; urgency=medium
+
+  * add patch cherry-picked upstream
+    to allow compilation without remote storage support
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 04 Mar 2024 08:09:58 +0100
+
+sccache (0.7.7-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update TODOs
+  * update and unfuzz patches
+  * add patch 2008 to use older branches of crates http hyper
+  * add patch 2011 to accept older releases of crate predicates
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 17 Feb 2024 17:04:00 +0100
+
+sccache (0.7.6-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * drop patches cherry-picked upstream, now obsolete;
+    unfuzz patches
+  * update dh-cargo fork
+  * update copyright info: update coverage
+  * reduce memory further for riscv64
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 23 Jan 2024 01:19:05 +0100
+
+sccache (0.7.5-2) unstable; urgency=medium
+
+  * drop patches 2008 2011 2013 2015 2016,
+    obsoleted by Debian package changes
+  * add patch cherry-picked upstream
+    to remove all dependences on ring 0.16,
+    superseding patch 2014
+  * add patch cherry-picked upstream
+    to add support for symlinks in toolchains
+  * stop build-depend on packages for crate trust-dns-resolver
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 18 Jan 2024 02:07:22 +0100
+
+sccache (0.7.5-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update and unfuzz patches
+  * tighten build-dependency for crate object;
+    closes: bug#1059701, thanks to Peter Michael Green
+  * add patches 2008 2010 2011 2012 2013 2014 2015 2016 2017
+    to accept older releases of crates
+    fs-err is-terminal memmap2 strip-ansi-escapes tar
+    trust-dns-resolver uuid which itertools
+  * relax build-dependencies for crates
+    itertools strip-ansi-escapes which,
+    to ease future migration (see bug#1060870, #1060874, #1060875)
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 15 Jan 2024 22:00:26 +0100
+
+sccache (0.7.4-3) unstable; urgency=medium
+
+  * reduce memory for i386 and riscv64
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 10 Dec 2023 23:57:40 +0100
+
+sccache (0.7.4-2) unstable; urgency=medium
+
+  * drop patch 2017, obsoleted by Debian package changes;
+    tighten build-dependency for crate memmap2
+  * use full path for build-time test TMPDIR
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 02 Dec 2023 20:17:01 +0100
+
+sccache (0.7.4-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release(s)
+
+  [ Jonas Smedegaard ]
+  * drop patches 2008 2012 2022,
+    obsoleted by Debian package changes;
+    update build-dependencies for crates predicates reqwest
+  * set TMPDIR while checking tests;
+    closes: bug#1052696, thanks to Gianfranco Costamagna
+  * update dh-cargo fork
+  * update copyright info: update coverage
+  * update and unfuzz patches
+  * rename patch 1002 -> 1005
+  * add patch 1003
+    to adjust placement of crate dependencies and a comment
+  * build-depend on packages
+    for crates memchr test-case trust-dns-resolver
+  * add patches 2005 2007
+    to accept older branch of crates toml zstd;
+    relax build-dependencies
+    for crates memmap2 object toml zstd
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 02 Dec 2023 14:32:36 +0100
+
+sccache (0.5.4-12) unstable; urgency=medium
+
+  * drop patch 2010, obsoleted by Debian package updates;
+    tighten build-dependency for crate toml
+  * add patch 1002
+    to extend dependency to match newer crate object 0.31.1;
+    tighten build-dependency for crate object;
+    closes: bug#1050891, thanks to Peter Michael Green
+  * update dh-cargo fork
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 31 Aug 2023 09:59:45 +0200
+
+sccache (0.5.4-11) unstable; urgency=medium
+
+  * drop patch 2018, obsoleted by Debian package changes
+  * update dh-cargo fork;
+    closes: bug#1048427, thanks to Lucas Nussbaum
+  * update DEP-3 patch headers
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 24 Aug 2023 10:23:51 +0200
+
+sccache (0.5.4-10) unstable; urgency=medium
+
+  * drop patch 2014, obsoleted by Debian package changes;
+    tighten build-dependency for crate hyper;
+    update DEP-3 headers of patches
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 13 Aug 2023 10:57:56 +0200
+
+sccache (0.5.4-9) unstable; urgency=medium
+
+  * drop patches 2005 2021, obsoleted by Debian package changes;
+    update build- and autopkgtest-dependencies for crate env_logger
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 11 Aug 2023 02:36:06 +0200
+
+sccache (0.5.4-8) unstable; urgency=medium
+
+  * drop patch 2011, obsoleted by Debian package update;
+    update build-dependency for crate serial-test;
+    closes: bug#1043176, thanks to Peter Green
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 07 Aug 2023 02:08:33 +0200
+
+sccache (0.5.4-7) unstable; urgency=medium
+
+  * fix yet again: reduce lto further on mipsel
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 30 Jul 2023 18:13:02 +0200
+
+sccache (0.5.4-6) unstable; urgency=medium
+
+  * update dh-cargo fork
+  * fix: reduce lto further on mipsel
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 30 Jul 2023 00:24:31 +0200
+
+sccache (0.5.4-5) unstable; urgency=medium
+
+  * fix: reduce lto further on mipsel
+  * update dh-cargo fork
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 29 Jul 2023 20:41:03 +0200
+
+sccache (0.5.4-4) unstable; urgency=medium
+
+  * reduce lto further on mipsel
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 29 Jul 2023 18:52:38 +0200
+
+sccache (0.5.4-3) unstable; urgency=medium
+
+  * drop patches 2007 2013 2015 2016 2023,
+    obsoleted by Debian package updates;
+    update build-dependencies for crates daemonize directories;
+    closes: bug#1042225, thanks to Lucas Nussbaum
+  * update dh-cargo fork
+  * use thin link-time optimization for weak arches,
+    and drop other workarounds for those;
+    closes: bug#1042401, thanks to Peter Green
+  * update DEP-3 patch headers
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 29 Jul 2023 10:37:26 +0200
+
+sccache (0.5.4-2) unstable; urgency=medium
+
+  * drop patch 2019, obsoleted by Debian package updates
+  * fix help2man fallback message
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 05 Jul 2023 20:31:19 +0200
+
+sccache (0.5.4-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * drop patches 2013 2020, obsoleted by Debian package updates;
+    tighten build-dependency on rustc;
+    build-depend on package for crate is_terminal
+  * add patch 2013 to relax dependency on crate is-terminal
+  * unfuzz patches
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 27 Jun 2023 15:22:37 +0200
+
+sccache (0.5.3-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release(s)
+
+  [ Jonas Smedegaard ]
+  * drop patches 2006 2013 2017,
+    and reduce+rename patch 2010 to only cover toml,
+    both due to changed crate packages;
+    bump build-dependency for crate base64;
+    build-depend on package for crate fs-err
+  * update and unfuzz patches
+  * stop bogusly build-depend on package for crate bstr;
+    bump build-dependency for crate semver;
+    closes: bug#1038709, thanks to Peter Green
+  * add patch 2006 to avoid non-Debian-packaged crate temp-env;
+    unfuzz other patches
+  * tighten build-dependency for crate anyhow;
+    build-depend on package for crate object
+  * add patch 2013 to relax dependency on rustc:
+    relax build-dependency on rustc
+  * add patch 2017 to relax dependency on crate memmap2;
+    build-depend on package for crate memmap2
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 20 Jun 2023 19:54:47 +0200
+
+sccache (0.5.0-1) experimental; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * build-depend on package for crate once-cell (not lazy-static)
+  * update and unfuzz patches
+  * update copyright info: update coverage
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 25 May 2023 14:31:26 +0200
+
+sccache (0.4.2-1) experimental; urgency=medium
+
+  [ upstream ]
+  * new release(s)
+
+  [ Jonas Smedegaard ]
+  * extend patch 2010
+  * unfuzz patches
+  * update and unfuzz patches
+  * add patches 2015-2023 to relax dependencies for crates
+    uuid daemonize libc regex clap chrono directories,
+    avoid crate is-terminal,
+    and avoid reqwest feature trust-dns
+  * build-depend on package for crate encoding;
+    tighten build-dependencies for crate serde,
+    and stop build-depend on package for crate serde-derive;
+    build-depend on recent rustc
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 21 May 2023 23:19:24 +0200
+
+sccache (0.4.0~~pre8-8) unstable; urgency=medium
+
+  * fix pass cargo arguments also to subcommand install
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 03 Mar 2023 01:45:46 +0100
+
+sccache (0.4.0~~pre8-7) unstable; urgency=medium
+
+  * fix: disable feature dist-client
+    also when compiling+checking tests for arches armel armhf mipsel
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Mar 2023 23:38:39 +0100
+
+sccache (0.4.0~~pre8-6) unstable; urgency=medium
+
+  * disable feature dist-client
+    and tolerate failure compiling+checking tests
+    for weak arches armel armhf mipsel;
+    closes: bug#1031296, thanks to Adrian Bunk
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Mar 2023 23:01:04 +0100
+
+sccache (0.4.0~~pre8-5) unstable; urgency=medium
+
+  * skip (building and) checking tests on 32-bit arches;
+    enable feature dist-client inconditionally
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Mar 2023 16:08:32 +0100
+
+sccache (0.4.0~~pre8-4) unstable; urgency=medium
+
+  * disable parallel build on 32-bit arches
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Mar 2023 08:25:09 +0100
+
+sccache (0.4.0~~pre8-3) unstable; urgency=medium
+
+  * extend patch 1001 to cover more feature-conditional tests
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 01 Mar 2023 21:10:07 +0100
+
+sccache (0.4.0~~pre8-2) unstable; urgency=medium
+
+  * avoid feature dist-client on 32-bit arches,
+    to hopefully succeed build (see bug#1031296)
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 28 Feb 2023 20:14:57 +0100
+
+sccache (0.4.0~~pre8-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new pre-release
+
+  [ Jonas Smedegaard ]
+  * update and unfuzz patches
+  * add patch 2013 to avoid crate fs_err
+  * add patch 2014 to relax dependency on crate hyper
+  * update TODOs
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Feb 2023 09:19:37 +0100
+
+sccache (0.4.0~~pre7-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new pre-release
+
+  [ Jonas Smedegaard ]
+  * drop patches 2007 2008 2009,
+    obsoleted by Debian package updates
+  * reduce patch 2002
+    to enable feature "dist-client"
+    (i.e. to avoid only opendal-based backends);
+    build-depend on packages
+    for crates flate2 hyper mime reqwest sha2 url
+  * add patches 2007 2008
+    to relax dependencies on crates assert_cmd sha2
+  * add patch 2009
+    to avoid non-Debian-packaged crate thirtyfour_sync
+  * unfuzz patches
+  * update dh-cargo fork
+  * update copyright info: update coverage
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 12 Feb 2023 12:57:36 +0100
+
+sccache (0.4.0~~pre6-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new pre-release(s)
+
+  [ Jonas Smedegaard ]
+  * drop patch 2012, obsoleted by Debian package updates
+  * drop patch 1001, obsoleted by upstream changes
+  * drop patch 2006, obsoleted by Debian package updates;
+    build-depend on librust-zstd-0.12+default-dev
+    (not librust-zstd-0.11+default-dev);
+    closes: bug#1028668, thanks to Lucas Nussbaum
+  * rewrite patch 2009 to relax clap micro version
+    (not revert to clap v3);
+    build-depend on librust-clap-4+default-dev
+    (not librust-clap-2+default-dev)
+  * unfuzz patches
+  * add patches 2006 2007 2008 2012
+    to relax dependency on crate num_cpus once_cell predicates regex
+  * update copyright info: update coverage
+  * update TODOs
+  * ensure embedded dh_cargo is used for testing
+  * add patch 1001 to skip tests when needed feature is disabled
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 26 Jan 2023 17:27:21 +0100
+
+sccache (0.4.0~~pre3-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new pre-release
+
+  [ Jonas Smedegaard ]
+  * drop patches 1004 2008, obsoleted by Debian package updates
+  * unfuzz patches
+  * add patches 2011 2012
+    to relax dependency on crates serial_test libc;
+    see bug#1026808, #1027330
+  * update TODOs
+  * build-depend on librust-zip-0.6-dev
+    (not librust-zip-0.5-dev);
+    closes: bug#1027148
+  * tidy manp page NAME section
+  * enable dh_dwz
+  * add patch 1001 to fix conditionalize test test_run_log_no_perm
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 30 Dec 2022 16:16:25 +0100
+
+sccache (0.4.0~~pre1-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new pre-release
+
+  [ Jonas Smedegaard ]
+  * update watch file: handle pre-releases
+  * drop patch 2007, obsoleted by Debian package updates
+  * add patch 2009 to use older crate clap;
+    see bug#1025690
+  * add patch 2010 to use older crate base64;
+    see bug#1026812
+  * update and unfuzz patches
+  * declare compliance with Debian Policy 4.6.2
+  * fix DEP-3 headers for patch 2006
+  * update dh-cargo fork;
+    build-depend on libstring-shellquote-perl
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 22 Dec 2022 10:52:02 +0100
+
+sccache (0.3.3-2) unstable; urgency=medium
+
+  * no-changes source-only upload to enable testing migration
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 15 Dec 2022 20:16:13 +0100
+
+sccache (0.3.3-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release(s)
+
+  [ Jonas Smedegaard ]
+  * drop patch 1003, obsoleted by upstream changes
+  * unfuzz patches
+  * add patches 2005 2006 2007 2008
+    to relax dependency on crates assert_cmd env_logger predicates zstd
+  * update copyright info: update coverage
+  * skip dh_dwz, failing
+  * as not yet approved from NEW queue, still closes: Bug#898400
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Dec 2022 11:43:49 +0100
+
+sccache (0.3.1-1) unstable; urgency=low
+
+  [ Blair Noctis & Jonas Smedegaard ]
+  * initial release;
+    closes: Bug#898400
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 07 Dec 2022 16:21:26 +0100
