@@ -1,0 +1,19 @@
+Description: accept older release of crate memmap2
+ (upstream changes seem minor,
+ so unreasonable to file a Debian bugreport about it)
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-04-22
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -52,7 +52,7 @@
+ linked-hash-map = "0.5"
+ log = "0.4"
+ memchr = "2"
+-memmap2 = "0.9.4"
++memmap2 = "0.9.3"
+ mime = "0.3"
+ num_cpus = "1.16"
+ number_prefix = "0.4"

@@ -1,4 +1,49 @@
 #!/usr/bin/make -f
 
+# resolve DEB_HOST_ARCH
+include /usr/share/dpkg/architecture.mk
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+export DEB_CXXFLAGS_MAINT_APPEND  = -Wall -pedantic
+
+# trust upstream optimization level unless explicitly disabled
+ifeq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
+export DEB_CFLAGS_MAINT_STRIP=-O2
+export DEB_CXXFLAGS_MAINT_STRIP=-O2
+endif
+
+# generate documentation unless nodoc requested
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
+MANPAGES = debian/sccache.1
+endif
+
+# reduce risk of out-of-memory issues during build for weak arches
+ifneq (,$(filter $(DEB_HOST_ARCH),armel armhf i386 mipsel riscv64))
+export RUSTFLAGS += -C embed-bitcode=no -C lto=no -C linker-plugin-lto=no
+endif
+
+# Fails with error: Error executing cache write: Cannot write to read-only storage
+TEST_READONLY = \
+ test_rust_cargo_cmd_readonly_preemtive_block
+
 %:
 	dh $@
+
+# ensure ccache is not in use during tests
+# avoid optimization to not run out of memory
+override_dh_auto_test:
+	PATH=/usr/sbin:/usr/bin:/sbin:/bin TMPDIR=$(CURDIR)/debian DEB_BUILD_OPTIONS=noopt dh_auto_test --buildsystem rust -- \
+	 --no-fail-fast -- $(addprefix --skip ,$(TEST_READONLY))
+
+execute_after_dh_auto_install: $(MANPAGES)
+	sed -e 's/%DEB_HOST_MULTIARCH%/$(DEB_HOST_MULTIARCH)/' \
+	 debian/update-sccache-symlinks.in \
+	 > debian/update-sccache-symlinks
+
+# build manpages
+debian/sccache.1: debian/%.1: debian/sccache/usr/bin/%
+	help2man --section 1 --no-info \
+		--name "a fast C/C++/Rust compiler cache" \
+		--output $@ $< \
+		|| { $< --help; false; }

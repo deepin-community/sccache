@@ -1,0 +1,16 @@
+Description: have test crate depend on byteorder (not outdated itoa)
+Author: Jonas Smedegaard <dr@jones.dk>
+Last-Update: 2024-05-17
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/test-crate/Cargo.toml
++++ b/tests/test-crate/Cargo.toml
+@@ -5,7 +5,7 @@
+ 
+ [dependencies]
+ # Arbitrary crate dependency that doesn't pull in any transitive dependencies.
+-itoa = "0.3.4"
++byteorder = "1"
+ 
+ [lib]
+ name = "mylib"

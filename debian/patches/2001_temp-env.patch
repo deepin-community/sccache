@@ -1,0 +1,59 @@
+Description: Ad-hoc impl of temp_env::with_var{,_unset}
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-06-14
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -121,7 +121,6 @@
+ itertools = ">= 0.12, <= 0.13"
+ predicates = "3.1.0"
+ serial_test = ">= 2.0.0, <= 3"
+-temp-env = "0.3.6"
+ test-case = "3.3.1"
+ thirtyfour_sync = "0.27"
+ 
+--- a/src/compiler/gcc.rs
++++ b/src/compiler/gcc.rs
+@@ -31,6 +31,31 @@
+ 
+ use crate::errors::*;
+ 
++fn with_var<F: FnOnce()>(key: &str, value: Option<&str>, f: F) {
++    /* env::var returns error if 1. the var isn't set, 2. key contains '=' or
++     * '\0', 3. value isn't valid Unicode. Not our concern in this use case.
++     */
++    let old = env::var(key).ok();
++
++    if let Some(value) = value {
++        env::set_var(key, value);
++    } else {
++        env::remove_var(key);
++    }
++
++    f();
++
++    if let Some(value) = old {
++        env::set_var(key, value);
++    } else {
++        env::remove_var(key);
++    }
++}
++
++fn with_var_unset<F: FnOnce()>(key: &str, f: F) {
++    with_var(key, None, f);
++}
++
+ /// A struct on which to implement `CCompilerImpl`.
+ #[derive(Clone, Debug)]
+ pub struct Gcc {
+@@ -951,8 +976,6 @@
+     use crate::mock_command::*;
+     use crate::test::utils::*;
+ 
+-    use temp_env::{with_var, with_var_unset};
+-
+     fn parse_arguments_(
+         arguments: Vec<String>,
+         plusplus: bool,

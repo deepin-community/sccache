@@ -1,0 +1,25 @@
+Description: avoid windows-only crates
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2024-09-30
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -130,16 +130,6 @@
+ optional = true
+ version = "0.1.15"
+ 
+-[target.'cfg(windows)'.dependencies.windows-sys]
+-features = [
+-  "Win32_Foundation",
+-  "Win32_Globalization",
+-  "Win32_Storage_FileSystem",
+-  "Win32_System_Threading",
+-  "Win32_System_Console",
+-]
+-version = "0.52"
+-
+ [features]
+ all = [
+   "dist-client",
