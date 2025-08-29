@@ -1,7 +1,6 @@
-Description: accept newer branch of crate env_logger
-Author: Jonas Smedegaard <dr@jones.dk>
-Bug-Debian: https://bugs.debian.org/1084849
-Last-Update: 2024-10-09
+Description: accept newer minor version of crate env_logger
+Author: Blair Noctis <ncts@debian.org>
+Last-Update: 2025-08-19
 ---
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/Cargo.toml
@@ -11,7 +10,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  directories = "5.0.1"
  encoding_rs = "0.8"
 -env_logger = "0.10"
-+env_logger = ">= 0.10, <= 0.11"
++env_logger = "0.11"
  filetime = "0.2"
  flate2 = { version = "1.0", optional = true, default-features = false, features = [
    "rust_backend",

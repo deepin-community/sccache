@@ -5,8 +5,8 @@
   * provide binary sccache-dist
     when needed Rust crate is in Debian
     * rouille
-  * enable features "azure", "gcs", "gha",
-    "memcached", "oss", "redis", "s3" and "webdav",
-    when needed Rust crate is in Debian
-    * opendal
-      <https://bugs.debian.org/1069715>
+  * enable features "gha", "memcached" and "redis",
+    when corresponding features of Rust crate opendal are in Debian
+    <https://bugs.debian.org/1102623>
+    <https://bugs.debian.org/1102624>
+    <https://bugs.debian.org/1102625>

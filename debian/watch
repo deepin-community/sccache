@@ -1,10 +1,8 @@
-version=4
+version: 5
 # check: uscan --report
 # update: gbp import-orig --upstream-vcs-tag=vX.Y.Z --uscan
 
-opts=\
-uversionmangle=s/\d\K-(pre)\./~~$1/,\
-filenamemangle=s/.*?(@ANY_VERSION@@ARCHIVE_EXT@)/@PACKAGE@-$1/,\
-dversionmangle=auto \
-https://github.com/mozilla/sccache/tags \
-.*?@ANY_VERSION@@ARCHIVE_EXT@
+Template: Github
+Owner: mozilla
+Project: sccache
+Uversion-Mangle: s/\d\K-([a-z]+)[.-]?(\d*)/~$1$2/

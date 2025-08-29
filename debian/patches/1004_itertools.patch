@@ -1,12 +1,21 @@
-Description: accept newer branches of crate itertools
+Description: accept newer minor versions of crate itertools
 Author: Jonas Smedegaard <dr@jones.dk>
 Bug-Debian: https://bugs.debian.org/1082663
-Last-Update: 2024-10-04
+Last-Update: 2025-08-19
 ---
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -126,7 +126,7 @@
+@@ -53,7 +53,7 @@
+   "tokio",
+   "server",
+ ] }
+-itertools = "0.12"
++itertools = ">= 0.12, <= 0.13"
+ jobserver = "0.1"
+ jwt = { package = "jsonwebtoken", version = "9", optional = true }
+ libc = "0.2.153"
+@@ -127,7 +127,7 @@
  cc = "1.0"
  chrono = "0.4.33"
  filetime = "0.2"

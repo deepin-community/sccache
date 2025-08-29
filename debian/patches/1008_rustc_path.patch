@@ -1,0 +1,33 @@
+Description: use unqualified rustc none below CARGO_HOME
+ rustc executable below CARGO_HOME is an artifact of rustup,
+ unavailable in Debian.packaged rustc.
+Author: Blair Noctis <ncts@debian.org>
+Bug: https://github.com/mozilla/sccache/issues/2303
+Last-Update: 2025-08-28
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/src/compiler/rust.rs
++++ b/src/compiler/rust.rs
+@@ -3250,16 +3250,18 @@
+     #[test]
+     fn test_rlib_dep_reader_call() {
+         let cargo_home = std::env::var("CARGO_HOME");
+-        assert!(cargo_home.is_ok());
++        //assert!(cargo_home.is_ok());
+ 
+         let mut env_vars = vec![];
+         if let Some(rustup_home) = std::env::var_os("RUSTUP_HOME") {
+             env_vars.push(("RUSTUP_HOME".into(), rustup_home));
+         }
+ 
+-        let mut rustc_path = PathBuf::from(cargo_home.unwrap());
+-        rustc_path.push("bin");
+-        rustc_path.push("rustc");
++        let rustc_path = cargo_home.ok()
++            .map(PathBuf::from)
++            .map(|mut path| { path.push("bin"); path.push("rustc"); path })
++            .map(|path| if path.exists() { path } else { "rustc".into() })
++            .unwrap_or_else(|| "rustc".into());
+ 
+         let rlib_dep_reader = RlibDepReader::new_with_check(rustc_path, &env_vars);
+         let is_ok = rlib_dep_reader.is_ok();

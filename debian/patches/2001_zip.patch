@@ -1,0 +1,28 @@
+Description: use newer major version of crate zip
+Author: Blair Noctis <ncts@debian.org>
+Forwarded: not-needed
+Last-Update: 2025-08-19
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -102,7 +102,7 @@
+ walkdir = "2"
+ # by default which pulls in an outdated failure version
+ which = { version = "8", features = ["real-sys"] }
+-zip = { version = "0.6", default-features = false }
++zip = { version = "2", default-features = false }
+ zstd = "0.13"
+ 
+ # dist-server only
+--- a/src/cache/cache.rs
++++ b/src/cache/cache.rs
+@@ -52,7 +52,7 @@
+ use std::sync::Arc;
+ use std::time::Duration;
+ use tempfile::NamedTempFile;
+-use zip::write::FileOptions;
++use zip::write::SimpleFileOptions as FileOptions;
+ use zip::{CompressionMethod, ZipArchive, ZipWriter};
+ 
+ use crate::errors::*;

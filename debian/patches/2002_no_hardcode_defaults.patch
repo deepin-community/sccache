@@ -1,0 +1,17 @@
+Description: avoid hardcoding default options interfering with debhelper
+Author: Jonas Smedegaard <dr@jones.dk>
+Forwarded: not-needed
+Last-Update: 2025-03-23
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -20,8 +20,6 @@
+ 
+ [profile.release]
+ codegen-units = 1
+-lto = true
+-strip = true
+ 
+ [dependencies]
+ anyhow = { version = "1.0", features = ["backtrace"] }

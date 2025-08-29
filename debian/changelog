@@ -1,3 +1,144 @@
+sccache (0.10.0-8) unstable; urgency=medium
+
+  * build-depend on libstd-rust-dev
+  * update watch file: use file format 5
+  * update and unfuzz patch
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 28 Aug 2025 22:50:28 +0200
+
+sccache (0.10.0-7) unstable; urgency=medium
+
+  * tighten DEP-3 patch headers
+  * revert patch 2003_no_opendal_backends to fully avoid crate opendal,
+    as the packaging in Debian is now too new;
+    stop build-depend on packages for crates opendal reqsign;
+    reopens: bug#1060330
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 19 Aug 2025 16:27:54 +0200
+
+sccache (0.10.0-6) experimental; urgency=medium
+
+  * add patch 2001_which to use newer branch of crate which;
+    update build-dependency for crate which;
+    closes: bug#1110142, thanks to Matthias Geiger
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 01 Aug 2025 23:50:34 +0200
+
+sccache (0.10.0-5) experimental; urgency=medium
+
+  * reduce patch 2003_no_opendal_backends;
+    build-depend on packages for crates opendal reqsign;
+    closes: bug#1060330
+  * skip tests missing a config file
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 11 Apr 2025 10:04:46 +0200
+
+sccache (0.10.0-4) unstable; urgency=medium
+
+  * update and unfuzz patches
+  * update DEP-3 headers for patch 2001_zip
+  * build-depend on package for crate temp-env
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 06 Apr 2025 08:28:28 +0200
+
+sccache (0.10.0-3) unstable; urgency=medium
+
+  * add patch 2001_fs-err to use newer version in Debian
+  * add patch 2001_zip to use newer version in Debian
+  * fix patch 1008 erroneously unwrapping
+  * update build-dependencies for crates fs-err zip
+
+ -- Blair Noctis <ncts@debian.org>  Wed, 26 Mar 2025 05:18:58 +0000
+
+sccache (0.10.0-2) unstable; urgency=medium
+
+  * add patch 2002_no_hardcode_defaults
+    to avoid hardcoding default options interfering with debhelper;
+    thanks to Matthias Geiger (see bug#1101077)
+  * declare compliance with Debian Policy 4.7.2
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 23 Mar 2025 13:49:05 +0100
+
+sccache (0.10.0-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * unfuzz patches
+  * declare compliance with Debian Policy 4.7.1
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 24 Feb 2025 22:18:34 +0100
+
+sccache (0.9.1-3) unstable; urgency=medium
+
+  * drop patch 2001_reqwest,
+    obsoleted by Debian packaging changes;
+    tighten build-dependencies for crate reqwest
+  * add metadata about upstream project
+  * update git-buildpackage config:
+    + filter out debian subdir
+    + improve usage comment
+  * update watch file:
+    + improve filename and upstream version mangling
+    + use Github API
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 09 Feb 2025 02:13:44 +0100
+
+sccache (0.9.1-2) unstable; urgency=medium
+
+  * update copyright info: update coverage
+  * drop patch 2001_hyper, obsoleted by Debian packaging changes;
+    bump build-dependency for crate http;
+    tighten build-dependencies for crate hyper;
+    build-depend on packages for crates http-body-util hyper-util
+  * drop patch 2001_memmap2, obsoleted by Debian packaging changes
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 25 Jan 2025 16:01:45 +0100
+
+sccache (0.9.1-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * update and unfuzz patches
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 11 Jan 2025 03:21:15 +0100
+
+sccache (0.9.0-3) unstable; urgency=medium
+
+  * add patch 1009 to avoid tests for split-dwarf on riscv for clang which lacks support
+  * add patch 2005 to disable arbitrarily failing test of multi -arch arguments
+
+ -- Blair Noctis <ncts@debian.org>  Mon, 06 Jan 2025 12:41:14 +0000
+
+sccache (0.9.0-2) unstable; urgency=medium
+
+  [ Peter Michael Green ]
+  * Bump object to 0.36, closes: #1090396
+
+  [ Blair Noctis ]
+  * Work around picking rustc from hard coded $CARGO_HOME, closes: #1090040
+  * Install upstream docs/
+
+ -- Blair Noctis <ncts@debian.org>  Fri, 03 Jan 2025 16:13:50 +0000
+
+sccache (0.9.0-1) unstable; urgency=medium
+
+  [ upstream ]
+  * new release
+
+  [ Jonas Smedegaard ]
+  * drop patch 2001_which,
+    obsoleted by Debian package changes;
+    tighten build-dependency for crate which
+  * update and unfuzz patches
+  * build-depend on package for crate shlex
+  * update copyright info: update coverage
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 10 Dec 2024 10:35:01 +0100
+
 sccache (0.8.2-2) unstable; urgency=medium
 
   * update and rename patch 2001_itertools -> 1004_itertools;

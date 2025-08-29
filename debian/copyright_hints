@@ -14,32 +14,34 @@ Files: CODE_OF_CONDUCT.md
  debian/control
  debian/copyright-check
  debian/gbp.conf
- debian/patches/0.20241005~af5ea09.patch
- debian/patches/1001_optional_tests.patch
  debian/patches/1002_dummy_crate.patch
- debian/patches/1003_tidy_manifest.patch
+ debian/patches/1004_base64.patch
  debian/patches/1004_env_logger.patch
+ debian/patches/1004_fs-err.patch
  debian/patches/1004_itertools.patch
  debian/patches/1004_predicates.patch
  debian/patches/1006_tests_network.patch
+ debian/patches/1007_object.patch
+ debian/patches/1008_rustc_path.patch
+ debian/patches/1009_riscv_clang_no_split-dwarf_tests.patch
  debian/patches/2001_assert_cmd.patch
  debian/patches/2001_gzp.patch
- debian/patches/2001_hyper.patch
- debian/patches/2001_memmap2.patch
- debian/patches/2001_reqwest.patch
  debian/patches/2001_serial_test.patch
- debian/patches/2001_temp-env.patch
  debian/patches/2001_thirtyfour_sync.patch
  debian/patches/2001_which.patch
+ debian/patches/2001_zip.patch
+ debian/patches/2002_no_hardcode_defaults.patch
  debian/patches/2002_no_windows.patch
  debian/patches/2003_no_dist-server.patch
  debian/patches/2003_no_dist-tests.patch
  debian/patches/2003_no_opendal_backends.patch
  debian/patches/2004_shared_libs.patch
+ debian/patches/2005_ignore_multiarch_tests.patch
  debian/patches/README
  debian/patches/series
  debian/rules
  debian/sccache.dirs
+ debian/sccache.docs
  debian/sccache.install
  debian/sccache.lintian-overrides
  debian/sccache.manpages
@@ -50,6 +52,7 @@ Files: CODE_OF_CONDUCT.md
  debian/source/lintian-overrides
  debian/update-sccache-symlinks.8
  debian/update-sccache-symlinks.in
+ debian/upstream/metadata
  debian/watch
  docs/Architecture.md
  docs/Azure.md
@@ -70,10 +73,12 @@ Files: CODE_OF_CONDUCT.md
  docs/Rust.md
  docs/S3.md
  docs/Webdav.md
+ docs/Xcode.md
  scripts/extratest.sh
  scripts/freebsd-ci-test.sh
  src/bin/sccache-dist/main.rs
  src/bin/sccache-dist/token_check.rs
+ src/cache/http_client.rs
  src/compiler/args.rs
  src/compiler/counted_array.rs
  src/dist/cache.rs
@@ -121,6 +126,9 @@ Files: CODE_OF_CONDUCT.md
  tests/test_whitespace.c
  tests/test_whitespace_alt.c
  tests/test_with_define.c
+ tests/xcode/main.cpp
+ tests/xcode/sccache.xcconfig
+ tests/xcode/xcode-test.xcodeproj/project.pbxproj
 Copyright: NONE
 License: UNKNOWN
  FIXME
@@ -167,6 +175,7 @@ Files: LICENSE
  src/cache/readonly.rs
  src/cache/s3.rs
  src/cache/webdav.rs
+ src/net.rs
 Copyright: NONE
 License: Apache-2.0
  FIXME
@@ -176,6 +185,14 @@ Files: src/compiler/compiler.rs
  src/compiler/nvhpc.rs
 Copyright: 2016, Mozilla Foundation
   Copyright (c) 2023 NVIDIA CORPORATION & AFFILIATES.
+License: Apache-2.0
+ FIXME
+
+Files: src/compiler/cicc.rs
+ src/compiler/cudafe.rs
+ src/compiler/ptxas.rs
+Copyright: 2016, Mozilla Foundation
+  Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES.
 License: Apache-2.0
  FIXME
 

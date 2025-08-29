@@ -27,6 +27,11 @@ endif
 TEST_READONLY = \
  test_rust_cargo_cmd_readonly_preemtive_block
 
+# Fails with error: Couldn't open config file
+TEST_NO_CONFIG = \
+ test_gcp_arg_check \
+ test_s3_invalid_args
+
 %:
 	dh $@
 
@@ -34,7 +39,7 @@ TEST_READONLY = \
 # avoid optimization to not run out of memory
 override_dh_auto_test:
 	PATH=/usr/sbin:/usr/bin:/sbin:/bin TMPDIR=$(CURDIR)/debian DEB_BUILD_OPTIONS=noopt dh_auto_test --buildsystem rust -- \
-	 --no-fail-fast -- $(addprefix --skip ,$(TEST_READONLY))
+	 --no-fail-fast -- $(addprefix --skip ,$(TEST_READONLY) $(TEST_NO_CONFIG))
 
 execute_after_dh_auto_install: $(MANPAGES)
 	sed -e 's/%DEB_HOST_MULTIARCH%/$(DEB_HOST_MULTIARCH)/' \
