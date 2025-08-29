@@ -1165,7 +1165,7 @@ pub mod server {
             .collect()
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq)]
     #[serde(tag = "type")]
     #[serde(deny_unknown_fields)]
     pub enum BuilderType {
@@ -1189,7 +1189,7 @@ pub mod server {
         },
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq)]
     #[serde(tag = "type")]
     #[serde(deny_unknown_fields)]
     pub enum SchedulerAuth {
@@ -1201,12 +1201,13 @@ pub mod server {
         Token { token: String },
     }
 
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Debug, Serialize, Deserialize, PartialEq)]
     #[serde(deny_unknown_fields)]
     pub struct Config {
         pub builder: BuilderType,
         pub cache_dir: PathBuf,
         pub public_addr: SocketAddr,
+        pub bind_address: Option<SocketAddr>,
         pub scheduler_url: HTTPUrl,
         pub scheduler_auth: SchedulerAuth,
         #[serde(default = "default_toolchain_cache_size")]
@@ -1309,22 +1310,25 @@ fn config_overrides() {
 
 #[test]
 #[serial]
+#[cfg(feature = "s3")]
 fn test_s3_no_credentials_conflict() {
     env::set_var("SCCACHE_S3_NO_CREDENTIALS", "true");
     env::set_var("SCCACHE_BUCKET", "my-bucket");
     env::set_var("AWS_ACCESS_KEY_ID", "aws-access-key-id");
     env::set_var("AWS_SECRET_ACCESS_KEY", "aws-secret-access-key");
 
-    let error = config_from_env().unwrap_err();
-    assert_eq!(
-        "If setting S3 credentials, SCCACHE_S3_NO_CREDENTIALS must not be set.",
-        error.to_string()
-    );
+    let cfg = config_from_env();
 
     env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
     env::remove_var("SCCACHE_BUCKET");
     env::remove_var("AWS_ACCESS_KEY_ID");
     env::remove_var("AWS_SECRET_ACCESS_KEY");
+
+    let error = cfg.unwrap_err();
+    assert_eq!(
+        "If setting S3 credentials, SCCACHE_S3_NO_CREDENTIALS must not be set.",
+        error.to_string()
+    );
 }
 
 #[test]
@@ -1333,14 +1337,16 @@ fn test_s3_no_credentials_invalid() {
     env::set_var("SCCACHE_S3_NO_CREDENTIALS", "yes");
     env::set_var("SCCACHE_BUCKET", "my-bucket");
 
-    let error = config_from_env().unwrap_err();
+    let cfg = config_from_env();
+
+    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
+    env::remove_var("SCCACHE_BUCKET");
+
+    let error = cfg.unwrap_err();
     assert_eq!(
         "SCCACHE_S3_NO_CREDENTIALS must be 'true', 'on', '1', 'false', 'off' or '0'.",
         error.to_string()
     );
-
-    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
-    env::remove_var("SCCACHE_BUCKET");
 }
 
 #[test]
@@ -1349,7 +1355,12 @@ fn test_s3_no_credentials_valid_true() {
     env::set_var("SCCACHE_S3_NO_CREDENTIALS", "true");
     env::set_var("SCCACHE_BUCKET", "my-bucket");
 
-    let env_cfg = config_from_env().unwrap();
+    let cfg = config_from_env();
+
+    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
+    env::remove_var("SCCACHE_BUCKET");
+
+    let env_cfg = cfg.unwrap();
     match env_cfg.cache.s3 {
         Some(S3CacheConfig {
             ref bucket,
@@ -1361,9 +1372,6 @@ fn test_s3_no_credentials_valid_true() {
         }
         None => unreachable!(),
     };
-
-    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
-    env::remove_var("SCCACHE_BUCKET");
 }
 
 #[test]
@@ -1372,7 +1380,12 @@ fn test_s3_no_credentials_valid_false() {
     env::set_var("SCCACHE_S3_NO_CREDENTIALS", "false");
     env::set_var("SCCACHE_BUCKET", "my-bucket");
 
-    let env_cfg = config_from_env().unwrap();
+    let cfg = config_from_env();
+
+    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
+    env::remove_var("SCCACHE_BUCKET");
+
+    let env_cfg = cfg.unwrap();
     match env_cfg.cache.s3 {
         Some(S3CacheConfig {
             ref bucket,
@@ -1384,18 +1397,23 @@ fn test_s3_no_credentials_valid_false() {
         }
         None => unreachable!(),
     };
-
-    env::remove_var("SCCACHE_S3_NO_CREDENTIALS");
-    env::remove_var("SCCACHE_BUCKET");
 }
 
 #[test]
+#[serial]
+#[cfg(feature = "gcs")]
 fn test_gcs_service_account() {
     env::set_var("SCCACHE_GCS_BUCKET", "my-bucket");
     env::set_var("SCCACHE_GCS_SERVICE_ACCOUNT", "my@example.com");
     env::set_var("SCCACHE_GCS_RW_MODE", "READ_WRITE");
 
-    let env_cfg = config_from_env().unwrap();
+    let cfg = config_from_env();
+
+    env::remove_var("SCCACHE_GCS_BUCKET");
+    env::remove_var("SCCACHE_GCS_SERVICE_ACCOUNT");
+    env::remove_var("SCCACHE_GCS_RW_MODE");
+
+    let env_cfg = cfg.unwrap();
     match env_cfg.cache.gcs {
         Some(GCSCacheConfig {
             ref bucket,
@@ -1409,10 +1427,6 @@ fn test_gcs_service_account() {
         }
         None => unreachable!(),
     };
-
-    env::remove_var("SCCACHE_GCS_BUCKET");
-    env::remove_var("SCCACHE_GCS_SERVICE_ACCOUNT");
-    env::remove_var("SCCACHE_GCS_RW_MODE");
 }
 
 #[test]
@@ -1578,6 +1592,68 @@ no_credentials = true
                 rewrite_includes_only: false,
             },
             server_startup_timeout_ms: Some(10000),
+        }
+    )
+}
+
+#[test]
+#[cfg(feature = "dist-server")]
+fn server_toml_parse() {
+    use server::BuilderType;
+    use server::SchedulerAuth;
+    const CONFIG_STR: &str = r#"
+    # This is where client toolchains will be stored.
+    cache_dir = "/tmp/toolchains"
+    # The maximum size of the toolchain cache, in bytes.
+    # If unspecified the default is 10GB.
+    toolchain_cache_size = 10737418240
+    # A public IP address and port that clients will use to connect to this builder.
+    public_addr = "192.168.1.1:10501"
+    # The socket address the builder will listen on.
+    bind_address = "0.0.0.0:10501"
+    # The URL used to connect to the scheduler (should use https, given an ideal
+    # setup of a HTTPS server in front of the scheduler)
+    scheduler_url = "https://192.168.1.1"
+
+    [builder]
+    type = "overlay"
+    # The directory under which a sandboxed filesystem will be created for builds.
+    build_dir = "/tmp/build"
+    # The path to the bubblewrap version 0.3.0+ `bwrap` binary.
+    bwrap_path = "/usr/bin/bwrap"
+
+    [scheduler_auth]
+    type = "jwt_token"
+    # This will be generated by the `generate-jwt-hs256-server-token` command or
+    # provided by an administrator of the sccache cluster.
+    token = "my server's token"
+    "#;
+
+    let server_config: server::Config = toml::from_str(CONFIG_STR).expect("Is valid toml.");
+    assert_eq!(
+        server_config,
+        server::Config {
+            builder: BuilderType::Overlay {
+                build_dir: PathBuf::from("/tmp/build"),
+                bwrap_path: PathBuf::from("/usr/bin/bwrap"),
+            },
+            cache_dir: PathBuf::from("/tmp/toolchains"),
+            public_addr: "192.168.1.1:10501"
+                .parse()
+                .expect("Public address must be valid socket address"),
+            bind_address: Some(
+                "0.0.0.0:10501"
+                    .parse()
+                    .expect("Bind address must be valid socket address")
+            ),
+
+            scheduler_url: parse_http_url("https://192.168.1.1")
+                .map(|url| { HTTPUrl::from_url(url) })
+                .expect("Scheduler url must be valid url str"),
+            scheduler_auth: SchedulerAuth::JwtToken {
+                token: "my server's token".to_owned()
+            },
+            toolchain_cache_size: 10737418240,
         }
     )
 }

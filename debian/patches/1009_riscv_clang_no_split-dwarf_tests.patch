@@ -1,0 +1,20 @@
+Description: Disable split-dwarf tests for clang on riscv64
+Author: Blair Noctis <ncts@debian.org>
+Bug: https://github.com/mozilla/sccache/issues/2309
+Last-Update: 2025-01-11
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/tests/system.rs
++++ b/tests/system.rs
+@@ -639,7 +639,11 @@
+     }
+     if compiler.name == "clang" || compiler.name == "gcc" {
+         test_gcc_clang_no_warnings_from_macro_expansion(compiler.clone(), tempdir);
++        #[cfg(not(target_arch = "riscv64"))]
+         test_split_dwarf_object_generate_output_dir_changes(compiler.clone(), tempdir);
++        // clang: error: -gsplit-dwarf is unsupported with RISC-V linker relaxation (-mrelax)
++        #[cfg(target_arch = "riscv64")]
++        if compiler.name != "clang" { test_split_dwarf_object_generate_output_dir_changes(compiler.clone(), tempdir); }
+         test_gcc_clang_depfile(compiler.clone(), tempdir);
+     }
+     if compiler.name == "clang++" {

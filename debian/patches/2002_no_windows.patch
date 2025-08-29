@@ -6,7 +6,7 @@ Last-Update: 2024-09-30
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -130,16 +130,6 @@
+@@ -135,16 +135,6 @@
  optional = true
  version = "0.1.15"
  

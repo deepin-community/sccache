@@ -1,7 +1,7 @@
-Description: accept newer branch of crate base64
+Description: accept newer minor version of crate base64
 Author: Jonas Smedegaard <dr@jones.dk>
 Bug-Debian: https://bugs.debian.org/1084849
-Last-Update: 2024-10-09
+Last-Update: 2025-08-19
 ---
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/Cargo.toml

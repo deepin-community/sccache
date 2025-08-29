@@ -13,7 +13,7 @@ Copyright:
   2016, 2018        Felix Obenhuber <felix@obenhuber.de>
   2017              Google Inc.
   2016-2018, 2023   Mozilla Foundation
-  2023              NVIDIA CORPORATION & AFFILIATES
+  2023-2024         NVIDIA CORPORATION & AFFILIATES
   2022              <LovecraftianHorror@pm.me>
 License-Grant:
  Licensed under the Apache License,
@@ -37,7 +37,7 @@ License: Apache-2.0 or Expat
 
 Files: debian/*
 Copyright:
-  2022-2024  Jonas Smedegaard <dr@jones.dk>
+  2022-2025  Jonas Smedegaard <dr@jones.dk>
 License-Grant:
  This packaging is free software;
  you can redistribute it and/or modify it
